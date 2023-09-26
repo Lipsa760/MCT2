@@ -12,6 +12,10 @@ const root = document.getElementById("movies");
 
 getMovies(APIURL);
 
+//-----------------LOCAL STORAGE------------------------
+
+let ls = JSON.parse(localStorage.getItem("sdata")) || [];
+
 async function getMovies(url) {
   const resp = await fetch(url);
   const respData = await resp.json();
@@ -23,6 +27,18 @@ function showMovies(movies) {
     const { poster_path, title, vote_average, overview } = movie;
     const movie_card = document.createElement("div");
     movie_card.classList.add("movie");
+
+    //-----------------EVENTLISTENER ON DIV------------------------
+
+    movie_card.addEventListener("click", function () {
+      if (ls.length == 0) {
+        ls.push(movie);
+      } else {
+        ls[0] = movie;
+      }
+      localStorage.setItem("sdata", JSON.stringify(ls));
+      window.location.href = "./details.html";
+    });
 
     movie_card.innerHTML = `
        <img src="${IMGPATH + poster_path}" alt="${title}"/>
